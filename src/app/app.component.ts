@@ -37,6 +37,8 @@ export class AppComponent {
         path.multipleLevelkeyPath
       );
 
+    console.log({ pathInfo: path });
+
     console.log({ singleLevelValue, multipleLevelValues });
 
     console.timeEnd('Time');
