@@ -2,7 +2,7 @@ import JSONView, {
   ThemeKeys,
   ReactJsonViewProps,
   OnSelectProps,
-  ThemeObject
+  ThemeObject,
 } from "react-json-view";
 
 export type JsonViewTheme = ThemeKeys;
@@ -22,10 +22,10 @@ export interface CustomThemeStyle {
 }
 
 export interface OnPathClickProps {
-  keyPath: string;
+  singleLevelkeyPath: string;
+  multipleLevelkeyPath: string;
   keyName: string | null;
   valueType: string;
-  value: any;
 }
 
 interface JsonViewProps {
@@ -72,13 +72,23 @@ const JsonView = ({
   iconStyle,
   customThemeStyle,
 }: JsonViewProps) => {
+  const normalizePath = (path: string): string => {
+    return path
+      .split(".")
+      .filter((part) => isNaN(Number(part)))
+      .join(".");
+  };
+
   const handleKeyClick = (event: OnSelectProps) => {
-    const path = event.namespace.join(".") + "." + event.name;
+    const singleLevelkeyPath = event.namespace.concat(event.name).join(".");
+
+    const multipleLevelkeyPath = normalizePath(singleLevelkeyPath);
+
     onSelect({
-      keyPath: path,
+      singleLevelkeyPath,
+      multipleLevelkeyPath,
       keyName: event.name,
       valueType: typeof event.value,
-      value: event.value,
     });
   };
 
